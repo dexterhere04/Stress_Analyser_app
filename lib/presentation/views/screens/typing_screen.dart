@@ -133,7 +133,9 @@ class _TypingScreenState extends ConsumerState<TypingScreen> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
         fillColor: Colors.grey.shade50,
+        hintStyle: const TextStyle(color: Colors.black54),
       ),
+      style: const TextStyle(color: Colors.black),
     );
   }
 
