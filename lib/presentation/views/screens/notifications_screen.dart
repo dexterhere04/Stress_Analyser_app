@@ -85,14 +85,21 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
   }
 
   Widget _buildAutoListeningCard(NotificationViewModel vm) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.cardLight,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFF3F0FF), width: 1.5),
+        border: Border.all(
+          color: isDark ? Colors.grey.shade800 : const Color(0xFFF3F0FF),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.08),
+            color: (isDark ? Colors.black : AppColors.primary).withValues(
+              alpha: 0.08,
+            ),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -111,7 +118,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                     color:
                         (vm.isAutoListening
                                 ? AppColors.primary
-                                : AppColors.textSecondaryLight)
+                                : (isDark
+                                      ? AppColors.textSecondaryDark
+                                      : AppColors.textSecondaryLight))
                             .withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -119,7 +128,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                     Icons.notifications_active,
                     color: vm.isAutoListening
                         ? AppColors.primary
-                        : AppColors.textSecondaryLight,
+                        : (isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondaryLight),
                     size: 20,
                   ),
                 ),
@@ -140,7 +151,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                             ? 'Listening for new notifications'
                             : 'Enable to analyze notifications automatically',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondaryLight,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondaryLight,
                         ),
                       ),
                     ],
@@ -167,14 +180,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.stressedColor.withValues(alpha: 0.12),
-                      AppColors.stressedColor.withValues(alpha: 0.04),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: AppColors.stressedColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: AppColors.stressedColor.withValues(alpha: 0.2),
@@ -232,7 +238,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                   Text(
                     'Listening for notifications from all apps',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondaryLight,
+                      color: isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondaryLight,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -246,6 +254,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
   }
 
   Widget _buildStatsSection(NotificationViewModel vm) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -281,12 +291,17 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
         const SizedBox(height: 14),
         Container(
           decoration: BoxDecoration(
-            color: AppColors.cardLight,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: const Color(0xFFF3F0FF), width: 1.5),
+            border: Border.all(
+              color: isDark ? Colors.grey.shade800 : const Color(0xFFF3F0FF),
+              width: 1.5,
+            ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.06),
+                color: (isDark ? Colors.black : AppColors.primary).withValues(
+                  alpha: 0.06,
+                ),
                 blurRadius: 12,
                 offset: const Offset(0, 2),
               ),
@@ -335,12 +350,13 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
   }
 
   Widget _buildSentimentBar(NotificationViewModel vm) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final total = vm.totalCount;
     if (total == 0) {
       return Container(
         height: 24,
         decoration: BoxDecoration(
-          color: const Color(0xFFF3F0FF),
+          color: isDark ? Colors.grey.shade800 : const Color(0xFFF3F0FF),
           borderRadius: BorderRadius.circular(12),
         ),
       );
@@ -356,7 +372,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: AppColors.textPrimaryLight.withValues(alpha: 0.06),
+            color: (isDark ? Colors.black : AppColors.textPrimaryLight)
+                .withValues(alpha: 0.06),
             blurRadius: 4,
           ),
         ],
@@ -395,6 +412,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
   }
 
   Widget _buildSentimentLegend(String label, int count, Color color) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       children: [
         Container(
@@ -413,7 +432,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
           '$label ($count)',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
             fontWeight: FontWeight.w500,
-            color: AppColors.textSecondaryLight,
+            color: isDark
+                ? AppColors.textSecondaryDark
+                : AppColors.textSecondaryLight,
           ),
         ),
       ],
