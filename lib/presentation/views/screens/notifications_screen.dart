@@ -24,6 +24,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       ref
           .read(notificationViewModelProvider.notifier)
           .loadRecentNotifications();
+      ref.read(notificationViewModelProvider.notifier).checkPermission();
     });
   }
 
@@ -62,9 +63,122 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _buildAutoListeningCard(vm),
+            const SizedBox(height: 24),
             _buildStatsSection(vm),
             const SizedBox(height: 24),
             _buildNotificationsList(vm),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAutoListeningCard(NotificationViewModel vm) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.notifications_active,
+                  color: vm.isAutoListening
+                      ? AppTheme.primaryColor
+                      : Colors.grey,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Auto Notification Analysis',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        vm.isAutoListening
+                            ? 'Listening for new notifications'
+                            : 'Enable to analyze notifications automatically',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                Switch(
+                  value: vm.isAutoListening,
+                  onChanged: (value) {
+                    if (value) {
+                      ref
+                          .read(notificationViewModelProvider.notifier)
+                          .startAutoListening();
+                    } else {
+                      ref
+                          .read(notificationViewModelProvider.notifier)
+                          .stopAutoListening();
+                    }
+                  },
+                ),
+              ],
+            ),
+            if (!vm.hasPermission) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppTheme.stressedColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.warning_amber_rounded,
+                      color: AppTheme.stressedColor,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Permission required to read notifications',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppTheme.stressedColor,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ref
+                            .read(notificationViewModelProvider.notifier)
+                            .requestPermission();
+                      },
+                      child: const Text('Enable'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            if (vm.isAutoListening) ...[
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: AppTheme.calmColor,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Listening for notifications from all apps',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
@@ -165,7 +279,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       child: Row(
         children: [
           Expanded(
-            flex: (positiveWidth * 100).round(),
+            flex: (positiveWidth * 100).round().clamp(1, 100),
             child: Container(
               decoration: BoxDecoration(
                 color: AppTheme.positiveSentiment,
@@ -176,11 +290,11 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             ),
           ),
           Expanded(
-            flex: (neutralWidth * 100).round(),
+            flex: (neutralWidth * 100).round().clamp(1, 100),
             child: Container(color: AppTheme.neutralSentiment),
           ),
           Expanded(
-            flex: (negativeWidth * 100).round(),
+            flex: (negativeWidth * 100).round().clamp(1, 100),
             child: Container(
               decoration: BoxDecoration(
                 color: AppTheme.negativeSentiment,
@@ -215,9 +329,42 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Recent Notifications',
-          style: Theme.of(context).textTheme.titleLarge,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Recent Notifications',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            if (vm.isAutoListening)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppTheme.calmColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                        color: AppTheme.calmColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Live',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppTheme.calmColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
         ),
         const SizedBox(height: 12),
         if (notifications.isEmpty)
@@ -235,7 +382,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Tap the + button to add a notification',
+                      'Enable auto-listening or tap + to add',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
