@@ -1,24 +1,32 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/models/typing_metrics.dart';
 import '../../data/models/notification_sentiment.dart';
+import '../../data/models/typing_metrics.dart';
 import '../../data/repositories/notification_repository.dart';
+import '../../data/services/notification_listener_service.dart';
 import '../../providers.dart';
 
 class NotificationViewModel extends ChangeNotifier {
   final NotificationRepository _repository;
+  final NotificationListenerService _listenerService;
 
   bool _isLoading = false;
   String? _error;
   List<NotificationSentiment> _recentNotifications = [];
   Map<SentimentType, int> _sentimentDistribution = {};
+  bool _isAutoListening = false;
+  bool _hasPermission = false;
 
-  NotificationViewModel(this._repository);
+  NotificationViewModel(this._repository, this._listenerService) {
+    _listenerService.onNotificationAnalyzed = _onNotificationAnalyzed;
+  }
 
   bool get isLoading => _isLoading;
   String? get error => _error;
   List<NotificationSentiment> get recentNotifications => _recentNotifications;
   Map<SentimentType, int> get sentimentDistribution => _sentimentDistribution;
+  bool get isAutoListening => _isAutoListening;
+  bool get hasPermission => _hasPermission;
 
   double get stressScore {
     if (_recentNotifications.isEmpty) return 0;
@@ -52,6 +60,45 @@ class NotificationViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> checkPermission() async {
+    _hasPermission = await _listenerService.checkPermission();
+    notifyListeners();
+  }
+
+  Future<bool> requestPermission() async {
+    _hasPermission = await _listenerService.requestPermission();
+    notifyListeners();
+    return _hasPermission;
+  }
+
+  Future<void> openNotificationSettings() async {
+    await _listenerService.requestPermission();
+  }
+
+  Future<void> startAutoListening() async {
+    if (_isAutoListening) return;
+
+    await _listenerService.startListening();
+    _isAutoListening = _listenerService.isListening;
+    notifyListeners();
+  }
+
+  Future<void> stopAutoListening() async {
+    if (!_isAutoListening) return;
+
+    await _listenerService.stopListening();
+    _isAutoListening = false;
+    notifyListeners();
+  }
+
+  void _onNotificationAnalyzed(NotificationSentiment notification) {
+    _recentNotifications.insert(0, notification);
+    _sentimentDistribution = _repository.getSentimentDistribution(
+      _recentNotifications,
+    );
+    notifyListeners();
+  }
+
   Future<void> addNotification({
     required String source,
     required String preview,
@@ -81,10 +128,17 @@ class NotificationViewModel extends ChangeNotifier {
     await _repository.cleanupOldRecords();
     await loadRecentNotifications();
   }
+
+  @override
+  void dispose() {
+    _listenerService.dispose();
+    super.dispose();
+  }
 }
 
 final notificationViewModelProvider =
     ChangeNotifierProvider<NotificationViewModel>((ref) {
       final repository = ref.watch(notificationRepositoryProvider);
-      return NotificationViewModel(repository);
+      final listenerService = ref.watch(notificationListenerServiceProvider);
+      return NotificationViewModel(repository, listenerService);
     });
