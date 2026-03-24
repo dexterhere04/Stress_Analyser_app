@@ -62,8 +62,8 @@ class _TypingScreenState extends ConsumerState<TypingScreen> {
               vm.isSessionActive ? Icons.keyboard_alt : Icons.keyboard,
               size: 48,
               color: vm.isSessionActive
-                  ? AppTheme.stressedColor
-                  : AppTheme.primaryColor,
+                  ? AppColors.stressedColor
+                  : AppColors.primary,
             ),
             const SizedBox(height: 16),
             Text(
@@ -90,7 +90,7 @@ class _TypingScreenState extends ConsumerState<TypingScreen> {
                     icon: const Icon(Icons.stop),
                     label: const Text('End Session'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.stressedColor,
+                      backgroundColor: AppColors.stressedColor,
                     ),
                   ),
                   OutlinedButton.icon(
@@ -163,7 +163,7 @@ class _TypingScreenState extends ConsumerState<TypingScreen> {
           value,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppTheme.primaryColor,
+            color: AppColors.primary,
           ),
         ),
         Text(label, style: Theme.of(context).textTheme.bodyMedium),
@@ -186,7 +186,7 @@ class _TypingScreenState extends ConsumerState<TypingScreen> {
                 title: 'Sessions',
                 value: '${vm.recentSessions.length}',
                 icon: Icons.history,
-                color: AppTheme.primaryColor,
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(width: 12),

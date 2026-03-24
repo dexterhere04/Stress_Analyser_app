@@ -76,7 +76,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                 title: 'Readings',
                 value: '${vm.recentReadings.length}',
                 icon: Icons.history,
-                color: AppTheme.primaryColor,
+                color: AppColors.primary,
               ),
             ),
           ],

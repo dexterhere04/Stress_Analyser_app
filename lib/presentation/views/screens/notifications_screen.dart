@@ -94,7 +94,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
         ),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryColor.withValues(alpha: 0.08),
+            color: AppColors.primary.withValues(alpha: 0.08),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -105,8 +105,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
           borderRadius: BorderRadius.circular(20),
           gradient: LinearGradient(
             colors: [
-              AppTheme.primaryColor.withValues(alpha: 0.03),
-              AppTheme.surfaceColor,
+              AppColors.primary.withValues(alpha: 0.03),
+              AppColors.surfaceLight,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -125,10 +125,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                       gradient: LinearGradient(
                         colors: [
                           (vm.isAutoListening
-                                  ? AppTheme.primaryColor
-                                  : AppTheme.textLighter)
+                                  ? AppColors.primary
+                                  : AppColors.textSecondaryLight)
                               .withValues(alpha: 0.15),
-                          AppTheme.surfaceColor,
+                          AppColors.surfaceLight,
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -138,8 +138,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                     child: Icon(
                       Icons.notifications_active,
                       color: vm.isAutoListening
-                          ? AppTheme.primaryColor
-                          : AppTheme.textLighter,
+                          ? AppColors.primary
+                          : AppColors.textSecondaryLight,
                       size: 20,
                     ),
                   ),
@@ -160,7 +160,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                               ? 'Listening for new notifications'
                               : 'Enable to analyze notifications automatically',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.textLight,
+                            color: AppColors.textSecondaryLight,
                           ),
                         ),
                       ],
@@ -189,15 +189,15 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        AppTheme.stressedColor.withValues(alpha: 0.12),
-                        AppTheme.stressedColor.withValues(alpha: 0.04),
+                        AppColors.stressedColor.withValues(alpha: 0.12),
+                        AppColors.stressedColor.withValues(alpha: 0.04),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppTheme.stressedColor.withValues(alpha: 0.2),
+                      color: AppColors.stressedColor.withValues(alpha: 0.2),
                       width: 0.5,
                     ),
                   ),
@@ -205,7 +205,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                     children: [
                       const Icon(
                         Icons.warning_amber_rounded,
-                        color: AppTheme.stressedColor,
+                        color: AppColors.stressedColor,
                         size: 18,
                       ),
                       const SizedBox(width: 12),
@@ -213,7 +213,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                         child: Text(
                           'Permission required to read notifications',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.stressedColor,
+                            color: AppColors.stressedColor,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -227,7 +227,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                         child: Text(
                           'Enable',
                           style: TextStyle(
-                            color: AppTheme.stressedColor,
+                            color: AppColors.stressedColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -244,7 +244,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                       width: 8,
                       height: 8,
                       decoration: const BoxDecoration(
-                        color: AppTheme.calmColor,
+                        color: AppColors.calmColor,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -252,7 +252,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                     Text(
                       'Listening for notifications from all apps',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.textLight,
+                        color: AppColors.textSecondaryLight,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -285,7 +285,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                 title: 'Total',
                 value: '${vm.totalCount}',
                 icon: Icons.notifications,
-                color: AppTheme.primaryColor,
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(width: 12),
@@ -309,7 +309,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
             ),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.primaryColor.withValues(alpha: 0.06),
+                color: AppColors.primary.withValues(alpha: 0.06),
                 blurRadius: 12,
                 offset: const Offset(0, 2),
               ),
@@ -320,8 +320,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
               borderRadius: BorderRadius.circular(20),
               gradient: LinearGradient(
                 colors: [
-                  AppTheme.secondaryColor.withValues(alpha: 0.02),
-                  AppTheme.surfaceColor,
+                  AppColors.accent.withValues(alpha: 0.02),
+                  AppColors.surfaceLight,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -347,17 +347,17 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                       _buildSentimentLegend(
                         'Positive',
                         vm.positiveCount,
-                        AppTheme.positiveSentiment,
+                        AppColors.positiveSentiment,
                       ),
                       _buildSentimentLegend(
                         'Neutral',
                         vm.neutralCount,
-                        AppTheme.neutralSentiment,
+                        AppColors.neutralSentiment,
                       ),
                       _buildSentimentLegend(
                         'Negative',
                         vm.negativeCount,
-                        AppTheme.negativeSentiment,
+                        AppColors.negativeSentiment,
                       ),
                     ],
                   ),
@@ -392,7 +392,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.textDark.withValues(alpha: 0.06),
+            color: AppColors.textPrimaryLight.withValues(alpha: 0.06),
             blurRadius: 4,
           ),
         ],
@@ -405,8 +405,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppTheme.positiveSentiment,
-                    AppTheme.positiveSentiment.withValues(alpha: 0.8),
+                    AppColors.positiveSentiment,
+                    AppColors.positiveSentiment.withValues(alpha: 0.8),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -420,7 +420,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
           Expanded(
             flex: (neutralWidth * 100).round().clamp(1, 100),
             child: Container(
-              color: AppTheme.neutralSentiment.withValues(alpha: 0.8),
+              color: AppColors.neutralSentiment.withValues(alpha: 0.8),
             ),
           ),
           Expanded(
@@ -429,8 +429,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppTheme.negativeSentiment.withValues(alpha: 0.8),
-                    AppTheme.negativeSentiment,
+                    AppColors.negativeSentiment.withValues(alpha: 0.8),
+                    AppColors.negativeSentiment,
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -468,7 +468,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
           '$label ($count)',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
             fontWeight: FontWeight.w500,
-            color: AppTheme.textLight,
+            color: AppColors.textSecondaryLight,
           ),
         ),
       ],
@@ -497,15 +497,15 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppTheme.calmColor.withValues(alpha: 0.15),
-                      AppTheme.calmColor.withValues(alpha: 0.05),
+                      AppColors.calmColor.withValues(alpha: 0.15),
+                      AppColors.calmColor.withValues(alpha: 0.05),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: AppTheme.calmColor.withValues(alpha: 0.2),
+                    color: AppColors.calmColor.withValues(alpha: 0.2),
                     width: 0.5,
                   ),
                 ),
@@ -516,7 +516,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                       width: 6,
                       height: 6,
                       decoration: const BoxDecoration(
-                        color: AppTheme.calmColor,
+                        color: AppColors.calmColor,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -524,7 +524,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                     Text(
                       'Live',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.calmColor,
+                        color: AppColors.calmColor,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -554,8 +554,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                         shape: BoxShape.circle,
                         gradient: LinearGradient(
                           colors: [
-                            AppTheme.primaryColor.withValues(alpha: 0.1),
-                            AppTheme.surfaceColor,
+                            AppColors.primary.withValues(alpha: 0.1),
+                            AppColors.surfaceLight,
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -564,7 +564,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                       child: Icon(
                         Icons.inbox,
                         size: 48,
-                        color: AppTheme.textLighter,
+                        color: AppColors.textSecondaryLight,
                       ),
                     ),
                     const SizedBox(height: 14),
@@ -578,7 +578,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                     Text(
                       'Enable auto-listening or tap + to add',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.textLight,
+                        color: AppColors.textSecondaryLight,
                       ),
                     ),
                   ],

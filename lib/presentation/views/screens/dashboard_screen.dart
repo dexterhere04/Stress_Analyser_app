@@ -123,7 +123,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 title: 'Notifications',
                 value: '${notificationVM.totalCount}',
                 icon: Icons.notifications,
-                color: AppTheme.primaryColor,
+                color: AppColors.primary,
               ),
             ),
           ],
@@ -136,7 +136,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 title: 'Positive',
                 value: '${notificationVM.positiveCount}',
                 icon: Icons.sentiment_satisfied,
-                color: AppTheme.positiveSentiment,
+                color: AppColors.positiveSentiment,
               ),
             ),
             const SizedBox(width: 12),
@@ -145,7 +145,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 title: 'Negative',
                 value: '${notificationVM.negativeCount}',
                 icon: Icons.sentiment_dissatisfied,
-                color: AppTheme.negativeSentiment,
+                color: AppColors.negativeSentiment,
               ),
             ),
           ],
@@ -216,13 +216,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     switch (sentiment) {
       case 'positive':
         icon = Icons.sentiment_satisfied;
-        color = AppTheme.positiveSentiment;
+        color = AppColors.positiveSentiment;
       case 'negative':
         icon = Icons.sentiment_dissatisfied;
-        color = AppTheme.negativeSentiment;
+        color = AppColors.negativeSentiment;
       default:
         icon = Icons.sentiment_neutral;
-        color = AppTheme.neutralSentiment;
+        color = AppColors.neutralSentiment;
     }
 
     return Container(
