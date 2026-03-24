@@ -36,16 +36,212 @@ class _TypingScreenState extends ConsumerState<TypingScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Typing Analysis')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      body: RefreshIndicator(
+        onRefresh: () => vm.loadRecentSessions(),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildKeyboardCard(vm),
+              const SizedBox(height: 24),
+              _buildTypingSessionCard(vm),
+              const SizedBox(height: 24),
+              _buildStatsGrid(vm),
+              const SizedBox(height: 24),
+              _buildRecentSessions(vm),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildKeyboardCard(TypingViewModel vm) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isDark ? Colors.grey.shade800 : const Color(0xFFF3F0FF),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: (isDark ? Colors.black : AppColors.primary).withValues(
+              alpha: 0.08,
+            ),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildTypingSessionCard(vm),
-            const SizedBox(height: 24),
-            _buildStatsGrid(vm),
-            const SizedBox(height: 24),
-            _buildRecentSessions(vm),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.keyboard,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'System-Wide Keyboard',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Enable DeStresser keyboard for continuous monitoring',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondaryLight,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Switch(
+                  value: vm.isKeyboardFullyEnabled,
+                  onChanged: (value) {
+                    if (value) {
+                      vm.openKeyboardSettings();
+                    } else {
+                      vm.disableKeyboard();
+                    }
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        (vm.isKeyboardEnabled
+                                ? AppColors.calmColor
+                                : AppColors.textSecondaryLight)
+                            .withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: vm.isKeyboardEnabled
+                              ? AppColors.calmColor
+                              : AppColors.textSecondaryLight,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        vm.isKeyboardEnabled ? 'Installed' : 'Not Installed',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: vm.isKeyboardEnabled
+                              ? AppColors.calmColor
+                              : AppColors.textSecondaryLight,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        (vm.isKeyboardSelected
+                                ? AppColors.calmColor
+                                : AppColors.warningColor)
+                            .withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: vm.isKeyboardSelected
+                              ? AppColors.calmColor
+                              : AppColors.warningColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        vm.isKeyboardSelected ? 'Active' : 'Set as Default',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: vm.isKeyboardSelected
+                              ? AppColors.calmColor
+                              : AppColors.warningColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            if (!vm.isKeyboardSelected) ...[
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () => vm.openKeyboardSettings(),
+                  icon: const Icon(Icons.settings, size: 18),
+                  label: const Text('Open Keyboard Settings'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Go to Settings > keyboards > DeStresser Keyboard',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: isDark
+                      ? AppColors.textSecondaryDark
+                      : AppColors.textSecondaryLight,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ],
         ),
       ),
