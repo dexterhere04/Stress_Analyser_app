@@ -15,6 +15,11 @@ class AppTheme {
   static const Color neutralSentiment = Color(0xFF9E9E9E);
   static const Color negativeSentiment = Color(0xFFF44336);
 
+  // Text colors
+  static const Color textDark = Color(0xFF1F2937);
+  static const Color textLight = Color(0xFF6B7280);
+  static const Color textLighter = Color(0xFF9CA3AF);
+
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
