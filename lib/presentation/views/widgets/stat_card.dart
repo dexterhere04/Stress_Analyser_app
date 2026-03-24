@@ -17,7 +17,7 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = color ?? AppTheme.primaryColor;
+    final cardColor = color ?? AppColors.primary;
 
     return Card(
       child: Padding(

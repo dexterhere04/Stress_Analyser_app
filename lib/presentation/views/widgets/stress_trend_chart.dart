@@ -98,9 +98,9 @@ class StressTrendChart extends StatelessWidget {
               isCurved: true,
               gradient: LinearGradient(
                 colors: [
-                  AppTheme.calmColor,
-                  AppTheme.moderateColor,
-                  AppTheme.stressedColor,
+                  AppColors.calmColor,
+                  AppColors.moderateColor,
+                  AppColors.stressedColor,
                 ],
               ),
               barWidth: 3,
@@ -122,8 +122,8 @@ class StressTrendChart extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppTheme.primaryColor.withValues(alpha: 0.3),
-                    AppTheme.primaryColor.withValues(alpha: 0.0),
+                    AppColors.primary.withValues(alpha: 0.3),
+                    AppColors.primary.withValues(alpha: 0.0),
                   ],
                 ),
               ),

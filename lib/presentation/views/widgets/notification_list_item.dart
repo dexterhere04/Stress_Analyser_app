@@ -49,13 +49,13 @@ class NotificationListItem extends StatelessWidget {
     switch (notification.sentiment) {
       case SentimentType.positive:
         icon = Icons.sentiment_satisfied;
-        color = AppTheme.positiveSentiment;
+        color = AppColors.positiveSentiment;
       case SentimentType.neutral:
         icon = Icons.sentiment_neutral;
-        color = AppTheme.neutralSentiment;
+        color = AppColors.neutralSentiment;
       case SentimentType.negative:
         icon = Icons.sentiment_dissatisfied;
-        color = AppTheme.negativeSentiment;
+        color = AppColors.negativeSentiment;
     }
 
     return Container(
@@ -74,13 +74,13 @@ class NotificationListItem extends StatelessWidget {
 
     switch (notification.sentiment) {
       case SentimentType.positive:
-        color = AppTheme.positiveSentiment;
+        color = AppColors.positiveSentiment;
         label = 'Positive';
       case SentimentType.neutral:
-        color = AppTheme.neutralSentiment;
+        color = AppColors.neutralSentiment;
         label = 'Neutral';
       case SentimentType.negative:
-        color = AppTheme.negativeSentiment;
+        color = AppColors.negativeSentiment;
         label = 'Negative';
     }
 

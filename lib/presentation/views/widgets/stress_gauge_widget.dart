@@ -51,7 +51,7 @@ class _GaugePainter extends CustomPainter {
     final radius = math.min(size.width, size.height) / 2 - 20;
 
     final backgroundPaint = Paint()
-      ..color = Colors.grey.shade200
+      ..color = Colors.grey.shade300
       ..style = PaintingStyle.stroke
       ..strokeWidth = 20
       ..strokeCap = StrokeCap.round;
@@ -71,9 +71,9 @@ class _GaugePainter extends CustomPainter {
       startAngle: startAngle,
       endAngle: startAngle + sweepAngle,
       colors: [
-        AppTheme.calmColor,
-        AppTheme.moderateColor,
-        AppTheme.stressedColor,
+        AppColors.calmColor,
+        AppColors.moderateColor,
+        AppColors.stressedColor,
       ],
       stops: const [0.0, 0.5, 1.0],
     );
