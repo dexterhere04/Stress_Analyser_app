@@ -87,11 +87,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
   Widget _buildAutoListeningCard(NotificationViewModel vm) {
     return Container(
       decoration: BoxDecoration(
+        color: AppColors.cardLight,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFFF3F0FF),
-          width: 1.5,
-        ),
+        border: Border.all(color: const Color(0xFFF3F0FF), width: 1.5),
         boxShadow: [
           BoxShadow(
             color: AppColors.primary.withValues(alpha: 0.08),
@@ -100,167 +98,148 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
           ),
         ],
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
-            colors: [
-              AppColors.primary.withValues(alpha: 0.03),
-              AppColors.surfaceLight,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          (vm.isAutoListening
-                                  ? AppColors.primary
-                                  : AppColors.textSecondaryLight)
-                              .withValues(alpha: 0.15),
-                          AppColors.surfaceLight,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      Icons.notifications_active,
-                      color: vm.isAutoListening
-                          ? AppColors.primary
-                          : AppColors.textSecondaryLight,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Auto Notification Analysis',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          vm.isAutoListening
-                              ? 'Listening for new notifications'
-                              : 'Enable to analyze notifications automatically',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.textSecondaryLight,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Switch(
-                    value: vm.isAutoListening,
-                    onChanged: (value) {
-                      if (value) {
-                        ref
-                            .read(notificationViewModelProvider.notifier)
-                            .startAutoListening();
-                      } else {
-                        ref
-                            .read(notificationViewModelProvider.notifier)
-                            .stopAutoListening();
-                      }
-                    },
-                  ),
-                ],
-              ),
-              if (!vm.hasPermission) ...[
-                const SizedBox(height: 14),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.stressedColor.withValues(alpha: 0.12),
-                        AppColors.stressedColor.withValues(alpha: 0.04),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color:
+                        (vm.isAutoListening
+                                ? AppColors.primary
+                                : AppColors.textSecondaryLight)
+                            .withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: AppColors.stressedColor.withValues(alpha: 0.2),
-                      width: 0.5,
-                    ),
                   ),
-                  child: Row(
+                  child: Icon(
+                    Icons.notifications_active,
+                    color: vm.isAutoListening
+                        ? AppColors.primary
+                        : AppColors.textSecondaryLight,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(
-                        Icons.warning_amber_rounded,
-                        color: AppColors.stressedColor,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Permission required to read notifications',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.stressedColor,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      Text(
+                        'Auto Notification Analysis',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          ref
-                              .read(notificationViewModelProvider.notifier)
-                              .requestPermission();
-                        },
-                        child: Text(
-                          'Enable',
-                          style: TextStyle(
-                            color: AppColors.stressedColor,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      const SizedBox(height: 4),
+                      Text(
+                        vm.isAutoListening
+                            ? 'Listening for new notifications'
+                            : 'Enable to analyze notifications automatically',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textSecondaryLight,
                         ),
                       ),
                     ],
                   ),
                 ),
+                Switch(
+                  value: vm.isAutoListening,
+                  onChanged: (value) {
+                    if (value) {
+                      ref
+                          .read(notificationViewModelProvider.notifier)
+                          .startAutoListening();
+                    } else {
+                      ref
+                          .read(notificationViewModelProvider.notifier)
+                          .stopAutoListening();
+                    }
+                  },
+                ),
               ],
-              if (vm.isAutoListening) ...[
-                const SizedBox(height: 12),
-                Row(
+            ),
+            if (!vm.hasPermission) ...[
+              const SizedBox(height: 14),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.stressedColor.withValues(alpha: 0.12),
+                      AppColors.stressedColor.withValues(alpha: 0.04),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: AppColors.stressedColor.withValues(alpha: 0.2),
+                    width: 0.5,
+                  ),
+                ),
+                child: Row(
                   children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: AppColors.calmColor,
-                        shape: BoxShape.circle,
+                    const Icon(
+                      Icons.warning_amber_rounded,
+                      color: AppColors.stressedColor,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Permission required to read notifications',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.stressedColor,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Listening for notifications from all apps',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondaryLight,
-                        fontWeight: FontWeight.w500,
+                    TextButton(
+                      onPressed: () {
+                        ref
+                            .read(notificationViewModelProvider.notifier)
+                            .requestPermission();
+                      },
+                      child: Text(
+                        'Enable',
+                        style: TextStyle(
+                          color: AppColors.stressedColor,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ],
+              ),
             ],
-          ),
+            if (vm.isAutoListening) ...[
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: AppColors.calmColor,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Listening for notifications from all apps',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.textSecondaryLight,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ],
         ),
       ),
     );
@@ -302,11 +281,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
         const SizedBox(height: 14),
         Container(
           decoration: BoxDecoration(
+            color: AppColors.cardLight,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: const Color(0xFFF3F0FF),
-              width: 1.5,
-            ),
+            border: Border.all(color: const Color(0xFFF3F0FF), width: 1.5),
             boxShadow: [
               BoxShadow(
                 color: AppColors.primary.withValues(alpha: 0.06),
@@ -315,54 +292,41 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
               ),
             ],
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.accent.withValues(alpha: 0.02),
-                  AppColors.surfaceLight,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Sentiment Distribution',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Sentiment Distribution',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 16),
+                _buildSentimentBar(vm),
+                const SizedBox(height: 14),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildSentimentLegend(
+                      'Positive',
+                      vm.positiveCount,
+                      AppColors.positiveSentiment,
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildSentimentBar(vm),
-                  const SizedBox(height: 14),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildSentimentLegend(
-                        'Positive',
-                        vm.positiveCount,
-                        AppColors.positiveSentiment,
-                      ),
-                      _buildSentimentLegend(
-                        'Neutral',
-                        vm.neutralCount,
-                        AppColors.neutralSentiment,
-                      ),
-                      _buildSentimentLegend(
-                        'Negative',
-                        vm.negativeCount,
-                        AppColors.negativeSentiment,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    _buildSentimentLegend(
+                      'Neutral',
+                      vm.neutralCount,
+                      AppColors.neutralSentiment,
+                    ),
+                    _buildSentimentLegend(
+                      'Negative',
+                      vm.negativeCount,
+                      AppColors.negativeSentiment,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -403,14 +367,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
             flex: (positiveWidth * 100).round().clamp(1, 100),
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.positiveSentiment,
-                    AppColors.positiveSentiment.withValues(alpha: 0.8),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: AppColors.positiveSentiment,
                 borderRadius: BorderRadius.horizontal(
                   left: const Radius.circular(12),
                 ),
@@ -419,22 +376,13 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
           ),
           Expanded(
             flex: (neutralWidth * 100).round().clamp(1, 100),
-            child: Container(
-              color: AppColors.neutralSentiment.withValues(alpha: 0.8),
-            ),
+            child: Container(color: AppColors.neutralSentiment),
           ),
           Expanded(
             flex: (negativeWidth * 100).round().clamp(1, 100),
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.negativeSentiment.withValues(alpha: 0.8),
-                    AppColors.negativeSentiment,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: AppColors.negativeSentiment,
                 borderRadius: BorderRadius.horizontal(
                   right: const Radius.circular(12),
                 ),
@@ -456,10 +404,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
             color: color,
             shape: BoxShape.circle,
             boxShadow: [
-              BoxShadow(
-                color: color.withValues(alpha: 0.4),
-                blurRadius: 4,
-              ),
+              BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 4),
             ],
           ),
         ),
@@ -493,7 +438,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
             ),
             if (vm.isAutoListening)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -538,10 +486,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: const Color(0xFFF3F0FF),
-                width: 1.5,
-              ),
+              border: Border.all(color: const Color(0xFFF3F0FF), width: 1.5),
             ),
             child: Padding(
               padding: const EdgeInsets.all(28),

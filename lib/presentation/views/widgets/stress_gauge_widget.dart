@@ -67,21 +67,8 @@ class _GaugePainter extends CustomPainter {
       backgroundPaint,
     );
 
-    final gradient = SweepGradient(
-      startAngle: startAngle,
-      endAngle: startAngle + sweepAngle,
-      colors: [
-        AppColors.calmColor,
-        AppColors.moderateColor,
-        AppColors.stressedColor,
-      ],
-      stops: const [0.0, 0.5, 1.0],
-    );
-
     final scorePaint = Paint()
-      ..shader = gradient.createShader(
-        Rect.fromCircle(center: center, radius: radius),
-      )
+      ..color = AppTheme.getStressColor(score)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 20
       ..strokeCap = StrokeCap.round;
@@ -95,6 +82,17 @@ class _GaugePainter extends CustomPainter {
       false,
       scorePaint,
     );
+
+    final dotPaint = Paint()
+      ..color = AppTheme.getStressColor(score)
+      ..style = PaintingStyle.fill;
+
+    final dotCenter = Offset(
+      center.dx + radius * math.cos(scoreAngle),
+      center.dy + radius * math.sin(scoreAngle),
+    );
+    canvas.drawCircle(dotCenter, 14, dotPaint);
+    canvas.drawCircle(dotCenter, 8, Paint()..color = Colors.white);
   }
 
   @override
