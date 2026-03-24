@@ -16,6 +16,7 @@ class NotificationViewModel extends ChangeNotifier {
   Map<SentimentType, int> _sentimentDistribution = {};
   bool _isAutoListening = false;
   bool _hasPermission = false;
+  bool _pendingAutoStartAfterPermission = false;
 
   NotificationViewModel(this._repository, this._listenerService) {
     _listenerService.onNotificationAnalyzed = _onNotificationAnalyzed;
@@ -67,6 +68,15 @@ class NotificationViewModel extends ChangeNotifier {
 
   Future<bool> requestPermission() async {
     _hasPermission = await _listenerService.requestPermission();
+
+    if (_hasPermission && _pendingAutoStartAfterPermission && !_isAutoListening) {
+      await _listenerService.startListening();
+      _isAutoListening = _listenerService.isListening;
+      if (_isAutoListening) {
+        _pendingAutoStartAfterPermission = false;
+      }
+    }
+
     notifyListeners();
     return _hasPermission;
   }
@@ -78,8 +88,19 @@ class NotificationViewModel extends ChangeNotifier {
   Future<void> startAutoListening() async {
     if (_isAutoListening) return;
 
+    _hasPermission = await _listenerService.checkPermission();
+    if (!_hasPermission) {
+      _pendingAutoStartAfterPermission = true;
+      await _listenerService.requestPermission();
+      notifyListeners();
+      return;
+    }
+
     await _listenerService.startListening();
     _isAutoListening = _listenerService.isListening;
+    if (_isAutoListening) {
+      _pendingAutoStartAfterPermission = false;
+    }
     notifyListeners();
   }
 
@@ -88,6 +109,26 @@ class NotificationViewModel extends ChangeNotifier {
 
     await _listenerService.stopListening();
     _isAutoListening = false;
+    _pendingAutoStartAfterPermission = false;
+    notifyListeners();
+  }
+
+  Future<void> onAppResumed() async {
+    final previousPermission = _hasPermission;
+    _hasPermission = await _listenerService.checkPermission();
+
+    if (_hasPermission && _pendingAutoStartAfterPermission && !_isAutoListening) {
+      await _listenerService.startListening();
+      _isAutoListening = _listenerService.isListening;
+      if (_isAutoListening) {
+        _pendingAutoStartAfterPermission = false;
+      }
+    }
+
+    if (!_hasPermission && previousPermission && _isAutoListening) {
+      _isAutoListening = false;
+    }
+
     notifyListeners();
   }
 

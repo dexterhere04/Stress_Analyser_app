@@ -2,6 +2,8 @@ package com.example.destresser
 
 import android.provider.Settings
 import android.content.Intent
+import android.content.ComponentName
+import android.os.Build
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
@@ -27,6 +29,11 @@ class MainActivity : FlutterActivity() {
                     result.success(isNotificationListenerEnabled())
                 }
                 "startListening" -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        android.service.notification.NotificationListenerService.requestRebind(
+                            ComponentName(this, NotificationListener::class.java)
+                        )
+                    }
                     result.success(true)
                 }
                 "stopListening" -> {

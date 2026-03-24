@@ -54,9 +54,9 @@ class NotificationListener : NotificationListenerService() {
     }
 
     private fun isSystemPackage(packageName: String): Boolean {
-        return packageName.startsWith("com.android.") ||
-                packageName.startsWith("com.google.android.inputmethod") ||
-                packageName == packageName // Allow all packages for now
+        return packageName == applicationContext.packageName ||
+            packageName == "android" ||
+            packageName == "com.android.systemui"
     }
 }
 
