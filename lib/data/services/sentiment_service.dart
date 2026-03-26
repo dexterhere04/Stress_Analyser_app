@@ -1,29 +1,35 @@
-import 'package:ml_sentiment_simple/ml_sentiment_simple.dart';
-import '../models/typing_metrics.dart';
+SentimentType analyze(String text) {
+  if (text.trim().isEmpty) {
+    return SentimentType.neutral;
+  }
 
-class SentimentService {
-  final SentimentAnalyzer _analyzer = SentimentAnalyzer();
+  final lower = text.toLowerCase();
 
-  SentimentType analyze(String text) {
-    if (text.trim().isEmpty) {
-      return SentimentType.neutral;
-    }
+  const negativeKeywords = [
+    'depressed',
+    'sad',
+    'lonely',
+    'empty',
+    'tired of life',
+    'hate myself',
+    'want to die',
+    'kill myself',
+    'suicidal'
+  ];
 
-    final result = _analyzer.analyze(text);
-
-    if (result.label == 'positive') {
-      return SentimentType.positive;
-    } else if (result.label == 'negative') {
+  for (final word in negativeKeywords) {
+    if (lower.contains(word)) {
       return SentimentType.negative;
-    } else {
-      return SentimentType.neutral;
     }
   }
 
-  double getScore(String text) {
-    if (text.trim().isEmpty) {
-      return 0.0;
-    }
-    return _analyzer.analyze(text).score;
+  final result = _analyzer.analyze(text);
+
+  if (result.label == 'positive') {
+    return SentimentType.positive;
+  } else if (result.label == 'negative') {
+    return SentimentType.negative;
+  } else {
+    return SentimentType.neutral;
   }
 }
