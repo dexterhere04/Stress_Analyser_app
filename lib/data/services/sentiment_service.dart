@@ -5,25 +5,29 @@ class SentimentService {
   final SentimentAnalyzer _analyzer = SentimentAnalyzer();
 
   SentimentType analyze(String text) {
-    if (text.trim().isEmpty) {
-      return SentimentType.neutral;
-    }
+  if (text.trim().isEmpty) return SentimentType.neutral;
 
-    final result = _analyzer.analyze(text);
+  final lower = text.toLowerCase();
 
-    if (result.label == 'positive') {
-      return SentimentType.positive;
-    } else if (result.label == 'negative') {
+  const strongNegative = [
+    'depress',
+    'suicid',
+    'kill myself',
+    'want to die',
+    'end my life'
+  ];
+
+  for (final word in strongNegative) {
+    if (lower.contains(word)) {
       return SentimentType.negative;
-    } else {
-      return SentimentType.neutral;
     }
   }
 
-  double getScore(String text) {
-    if (text.trim().isEmpty) {
-      return 0.0;
-    }
-    return _analyzer.analyze(text).score;
-  }
+
+  final result = _analyzer.analyze(text);
+
+  if (result.score < -0.2) return SentimentType.negative;
+  if (result.score > 0.2) return SentimentType.positive;
+
+  return SentimentType.neutral;
 }
